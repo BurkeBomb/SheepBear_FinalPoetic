@@ -5,23 +5,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Bear & Sheep Emotional Timeline</title>
   <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
 </head>
 <body>
-  <header>
-    <h1>🐻 Bear & Sheep Emotional Timeline 🐑</h1>
-    <div class="controls">
-      <input type="text" id="searchInput" placeholder="Search quotes..." />
-      <select id="speakerFilter">
-        <option value="all">All</option>
-        <option value="bear">Bear</option>
-        <option value="sheep">Sheep</option>
-      </select>
-    </div>
-  </header>
+  <h1>🐻 & 🐑 Emotional Timeline</h1>
 
+  <!-- Filter -->
+  <label for="speakerFilter" class="visually-hidden">Filter by speaker</label>
+  <select id="speakerFilter" title="Filter by speaker">
+    <option value="all">All</option>
+    <option value="bear">Bear</option>
+    <option value="sheep">Sheep</option>
+  </select>
+
+  <!-- Timeline -->
+  <section id="timeline"></section>
+
+  <!-- Characters -->
+  <h2>Characters</h2>
   <div id="characterCards"></div>
-  <blockquote id="quoteOfTheMoment"></blockquote>
-  <div id="timeline"></div>
+
+  <!-- Psychological Profiles -->
+  <h2>Psychological Profiles</h2>
+  <div id="profiles"></div>
 
   <script src="script.js"></script>
 </body>
