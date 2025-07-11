@@ -5,10 +5,10 @@ async function loadJSON(file) {
 
 function createTimelineItem(entry) {
   const div = document.createElement('div');
-  div.className = 'timeline-item';
+  div.className = 'timeline-item reveal';
   div.innerHTML = `
-    <h3>${entry.date}</h3>
-    <em>${entry.caption}</em>
+    <h3>📅 ${entry.date}</h3>
+    <em>✨ ${entry.caption}</em>
     <p>🐻 ${entry.bear}</p>
     <p>🐑 ${entry.sheep}</p>
   `;
@@ -17,7 +17,7 @@ function createTimelineItem(entry) {
 
 function createCharacterCard(char) {
   return `
-    <div class="character-card">
+    <div class="character-card reveal">
       <h3>${char.icon} ${char.name} (${char.nickname})</h3>
       <p><strong>Archetype:</strong> ${char.archetype}</p>
       <p><strong>Energy:</strong> ${char.energy}</p>
@@ -28,13 +28,44 @@ function createCharacterCard(char) {
 
 function createProfileCard(profile) {
   return `
-    <div class="profile-card">
+    <div class="profile-card reveal">
       <h3>${profile.name}</h3>
       <p><strong>Defense:</strong> ${profile.defense}</p>
       <p><strong>Communication:</strong> ${profile.communication}</p>
       <p><strong>Trigger:</strong> ${profile.trigger}</p>
     </div>
   `;
+}
+
+// Scroll reveal logic
+function revealOnScroll() {
+  const reveals = document.querySelectorAll('.reveal');
+  const windowHeight = window.innerHeight;
+  reveals.forEach(el => {
+    const elementTop = el.getBoundingClientRect().top;
+    if (elementTop < windowHeight - 100) {
+      el.classList.add('active');
+    }
+  });
+}
+
+window.addEventListener('scroll', revealOnScroll);
+window.addEventListener('load', revealOnScroll);
+
+// Auto-play timeline entries (optional animation)
+function animateTimeline(timelineData) {
+  const section = document.getElementById('timeline');
+  let i = 0;
+  const interval = setInterval(() => {
+    if (i < timelineData.length) {
+      const item = createTimelineItem(timelineData[i]);
+      section.appendChild(item);
+      revealOnScroll();
+      i++;
+    } else {
+      clearInterval(interval);
+    }
+  }, 1000); // 1 second delay per card
 }
 
 async function renderApp() {
@@ -44,23 +75,15 @@ async function renderApp() {
     loadJSON('profiles.json')
   ]);
 
-  // Timeline
-  const timelineSection = document.getElementById('timeline');
-  timeline.forEach(entry => {
-    timelineSection.appendChild(createTimelineItem(entry));
-  });
+  animateTimeline(timeline);
 
-  // Character Cards
   document.getElementById('characterCards').innerHTML = characters.map(createCharacterCard).join('');
-
-  // Profiles
   document.getElementById('profiles').innerHTML = profiles.map(createProfileCard).join('');
 
-  // Filter (optional future)
   document.getElementById('speakerFilter').addEventListener('change', e => {
     const val = e.target.value;
     document.querySelectorAll('.timeline-item').forEach(item => {
-      item.style.display = 'block'; // show all
+      item.style.display = 'block';
       if (val !== 'all') {
         const contains = item.textContent.toLowerCase().includes(val);
         item.style.display = contains ? 'block' : 'none';
